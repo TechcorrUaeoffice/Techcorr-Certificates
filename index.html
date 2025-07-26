@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Techcorr UAE-Certificate Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+    <!-- <script>
+        (function() {
+            emailjs.init("gSeWrLy_QeyTEyMiD");
+        })();
+    </script> -->
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #080808;
+            --warning-color: #000000;
+            --danger-color: #080808;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+        }
+        
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .login-box {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+        }
+        
+        .login-logo {
+            margin-bottom: 30px;
+        }
+        
+        .login-logo svg {
+            height: 50px;
+        }
+        
+        .login-logo h1 {
+            margin: 10px 0 5px;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+        
+        .login-logo p {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .input-group input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        
+        .error-message {
+            color: var(--accent-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            background-color: #34495e;
+        }
+        
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Fixed Header */
+        .dashboard-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-logo svg {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .logo-subtext {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .logout-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .logout-btn:hover {
+            color: var(--light-color);
+        }
+        
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .add-btn {
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .add-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .add-btn i {
+            margin-right: 8px;
+        }
+        
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            gap: 15px;
+        }
+        
+        #searchInput {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        #searchInput:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        
+        #filterSelect {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #filterSelect:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+        
+        /* Scrollable Table Container */
+        .table-container {
+            max-height: calc(100vh - 250px);
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        
+        /* Sticky Table Header */
+        thead th {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--primary-color);
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            color: white;
+            font-weight: 600;
+        }
+        
+        th.sortable {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        th.sortable:hover {
+            background-color: #34495e;
+        }
+        
+        .sort-arrow {
+            margin-left: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .valid-row {
+            background-color: rgba(4, 253, 108, 0.093);
+        }
+        .expiring-row {
+            background-color: rgba(249, 212, 4, 0.155);
+        }
+        .expired-row {
+            background-color: rgba(250, 29, 4, 0.129);
+        }
+        
+        tr:hover {
+            background-color: #f8f9fa !important;
+        }
+        
+        td:nth-child(6), th:nth-child(6) {
+            text-align: center;
+        }
+        
+        td:nth-child(7), th:nth-child(7),
+        td:nth-child(8), th:nth-child(8) {
+            text-align: center;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .form-section {
+            margin: 25px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #eee;
+            display: none;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+            margin: 0 10px 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        
+        .btn-save {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-save:hover {
+            background-color: #34495e;
+        }
+        
+        .btn-edit, .btn-delete, .btn-view {
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-block;
+            text-decoration: none !important;
+            font-size: 14px;
+        }
+        
+        .btn-view {
+            color: var(--secondary-color);
+            border: 1px solid var(--secondary-color);
+        }
+        
+        .btn-view:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .btn-edit {
+            color: var(--secondary-color);
+            border: 1px solid var(--secondary-color);
+        }
+        
+        .btn-edit:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .btn-delete {
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+        
+        .btn-delete:hover {
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background-color: var(--light-color);
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .file-input-label:hover {
+            background-color: #e0e5e9;
+            border-color: var(--secondary-color);
+        }
+        
+        #fileInput {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-name {
+            margin-left: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-valid {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: var(--success-color);
+        }
+        
+        .status-expiring {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning-color);
+        }
+        
+        .status-expired {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger-color);
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+            
+            .header-logo {
+                margin-bottom: 10px;
+            }
+            
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .form-group {
+                min-width: 100%;
+            }
+            
+            .table-container {
+                max-height: calc(100vh - 300px);
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page (shown by default) -->
+    <div class="login-container" id="loginPage">
+        <div class="login-box">
+            <div class="login-logo">
+                <img src="/Techcorr with bc.gif">
+                <!-- <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="50" height="50" rx="10" fill="#3498db"/>
+                    <path d="M25 12L32 19H18L25 12Z" fill="white"/>
+                    <path d="M32 19V31H18V19H32Z" fill="white"/>
+                    <path d="M18 31L25 38L32 31H18Z" fill="white"/>
+                </svg> -->
+                <h1>Techcorr UAE</h1>
+                <p>Certificate Management System</p>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Enter Password</label>
+                <input type="password" id="password" placeholder="Enter your password" maxlength="9">
+                <div class="error-message" id="errorMessage">Incorrect password. Please try again.</div>
+            </div>
+            
+            <button class="login-btn" onclick="login()">Login</button>
+        </div>
+    </div>
+    
+    <!-- Dashboard with Certificate Management (hidden by default) -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-header">
+            <div class="header-logo">
+                <img src="/Techcorr with bc.gif">
+                <!-- <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="8" fill="#3498db"/>
+                    <path d="M20 10L25 15H15L20 10Z" fill="white"/>
+                    <path d="M25 15V25H15V15H25Z" fill="white"/>
+                    <path d="M15 25L20 30L25 25H15Z" fill="white"/>
+                </svg> -->
+                <div style="margin-left: 25px;">
+                    <div class="logo-text">Techcorr UAE</div>
+                    <div class="logo-subtext">Certificate Management System</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Logout
+            </button>
+        </div>
+
+        <div class="main-content">
+            <div class="container">
+                <div class="card">
+                    <button class="add-btn" onclick="showForm()">
+                        <i>+</i> Add New Certificate
+                    </button>
+
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search certificates..." oninput="renderTable()">
+                        <select id="filterSelect" onchange="applyFilter()">
+                            <option value="">-- Filter --</option>
+                            <option value="a-z">A to Z</option>
+                            <option value="valid-expired">Valid to Expired</option>
+                            <option value="expired-valid">Expired to Valid</option>
+                        </select>
+                    </div>
+
+                    <div class="form-section" id="formSection">
+                        <input type="hidden" id="editIndex">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="certName">Certificate Name</label>
+                                <input type="text" id="certName" class="form-control" placeholder="Enter name" required maxlength="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="certNumber">Certificate Number</label>
+                                <input type="text" id="certNumber" class="form-control" placeholder="Enter number" maxlength="50">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="validFrom">Valid From</label>
+                                <input type="text" id="validFrom" class="form-control" placeholder="DD-MM-YYYY" pattern="\d{2}-\d{2}-\d{4}" title="Please enter date in DD-MM-YYYY format">
+                            </div>
+                            <div class="form-group">
+                                <label for="expiryDate">Expiry Date</label>
+                                <input type="text" id="expiryDate" class="form-control" placeholder="DD-MM-YYYY" pattern="\d{2}-\d{2}-\d{4}" title="Please enter date in DD-MM-YYYY format">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Certificate File</label>
+                            <div class="file-input-container">
+                                <label class="file-input-label">
+                                    <span id="fileButtonText">Choose File</span>
+                                    <span id="fileName" class="file-name">No file chosen</span>
+                                    <input type="file" id="fileInput">
+                                </label>
+                            </div>
+                        </div>
+                        <button class="btn-save" onclick="saveCertificate()">Save Certificate</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="certTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;">#</th>
+                                    <th class="sortable" onclick="sortBy('name')" style="width: 25%;">Certificate Name</th>
+                                    <th class="sortable" onclick="sortBy('number')" style="width: 15%;">Number</th>
+                                    <th class="sortable" onclick="sortBy('validFrom')" style="width: 12%;">Valid From</th>
+                                    <th class="sortable" onclick="sortBy('expiryDate')" style="width: 12%;">Expiry Date</th>
+                                    <th style="width: 12%;">Status</th>
+                                    <th style="width: 10%;">View</th>
+                                    <th style="width: 10%;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="certBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Login System
+        const CORRECT_PASSWORD = "Ssmrkvmwj";
+        const SESSION_KEY = "techcorr_session";
+        let logoutTimer;
+        
+        // On page load, check if session exists
+        window.onload = function() {
+            const session = localStorage.getItem(SESSION_KEY);
+            if (session === "active") {
+                showDashboard();
+            } else {
+                showLogin();
+            }
+        };
+        
+        function showLogin() {
+            document.getElementById("loginPage").style.display = "flex";
+            document.getElementById("dashboard").style.display = "none";
+        }
+        
+        function showDashboard() {
+            document.getElementById("loginPage").style.display = "none";
+            document.getElementById("dashboard").style.display = "flex";
+            startLogoutTimer();
+            initCertificateSystem();
+        }
+        
+        function login() {
+            const passwordInput = document.getElementById("password");
+            const errorMessage = document.getElementById("errorMessage");
+            
+            if (passwordInput.value === CORRECT_PASSWORD) {
+                // Successful login
+                localStorage.setItem(SESSION_KEY, "active");
+                showDashboard();
+                passwordInput.value = "";
+            } else {
+                // Show error message
+                errorMessage.style.display = "block";
+                passwordInput.style.borderColor = "#e74c3c";
+                passwordInput.focus();
+            }
+        }
+        
+        function logout() {
+            clearTimeout(logoutTimer);
+            localStorage.removeItem(SESSION_KEY);
+            showLogin();
+            document.getElementById("errorMessage").style.display = "none";
+            document.getElementById("password").style.borderColor = "#ddd";
+        }
+        
+        function startLogoutTimer() {
+            clearTimeout(logoutTimer);
+            logoutTimer = setTimeout(() => {
+                logout();
+                alert("You have been automatically logged out due to inactivity.");
+            }, 3600000); // 1 hour = 3600000 ms
+        }
+        
+        // Reset timer on user activity
+        document.addEventListener("mousemove", () => {
+            if (document.getElementById("dashboard").style.display === "flex") {
+                startLogoutTimer();
+            }
+        });
+        
+        document.addEventListener("keydown", () => {
+            if (document.getElementById("dashboard").style.display === "flex") {
+                startLogoutTimer();
+            }
+        });
+        
+        // Password input handling
+        document.getElementById("password").addEventListener("input", function(e) {
+            if (this.value.length > 9) {
+                this.value = this.value.slice(0, 9);
+            }
+            if (this.value.length > 0) {
+                document.getElementById("errorMessage").style.display = "none";
+                this.style.borderColor = "#ddd";
+            }
+        });
+        
+        document.getElementById("password").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                login();
+            }
+        });
+
+        // Certificate Management System
+        let certificates = [];
+        let currentFilter = "";
+        let filteredCertificates = [];
+
+        function initCertificateSystem() {
+            document.getElementById('fileInput').addEventListener('change', function(e) {
+                const fileName = e.target.files.length ? e.target.files[0].name : 'No file chosen';
+                document.getElementById('fileName').textContent = fileName;
+                document.getElementById('fileButtonText').textContent = fileName ? 'Change File' : 'Choose File';
+            });
+
+            loadData();
+            renderTable();
+            setupDailyCheck();
+        }
+
+        function loadData() {
+            try {
+                const data = localStorage.getItem("certificates");
+                if (data) {
+                    certificates = JSON.parse(data);
+                } else {
+                    certificates = [];
+                }
+            } catch (e) {
+                console.error("Error loading data:", e);
+                certificates = [];
+            }
+        }
+
+        function saveData() {
+            try {
+                // Compress data before saving
+                const dataToSave = JSON.stringify(certificates);
+                
+                // Check if data exceeds quota
+                if (dataToSave.length > 5000000) { // 5MB approx
+                    alert("Warning: Certificate data is getting large. Consider deleting old entries.");
+                }
+                
+                // Save in chunks if needed
+                localStorage.setItem("certificates", dataToSave);
+            } catch (e) {
+                console.error("Error saving data:", e);
+                alert("Error saving certificates. Data may be too large. Try deleting some entries.");
+            }
+        }
+
+        function parseDate(dateStr) {
+            if (!dateStr) return null;
+            
+            // Try to parse DD-MM-YYYY format
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                const day = parseInt(parts[0], 10);
+                const month = parseInt(parts[1], 10) - 1;
+                const year = parseInt(parts[2], 10);
+                
+                const date = new Date(year, month, day);
+                if (!isNaN(date.getTime())) {
+                    return date;
+                }
+            }
+            
+            // Try to parse as ISO date (from previous format)
+            const isoDate = new Date(dateStr);
+            if (!isNaN(isoDate.getTime())) {
+                return isoDate;
+            }
+            
+            return null;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return "";
+            
+            // If already in DD-MM-YYYY format, return as is
+            if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
+                return dateStr;
+            }
+            
+            // Parse as Date object
+            const d = parseDate(dateStr);
+            if (!d || isNaN(d.getTime())) return "";
+            
+            const day = String(d.getDate()).padStart(2,'0');
+            const month = String(d.getMonth()+1).padStart(2,'0');
+            const year = d.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+
+        function showForm(editIdx = null) {
+            document.getElementById("formSection").style.display = "block";
+            if(editIdx !== null) {
+                const c = certificates[editIdx];
+                document.getElementById("certName").value = c.name;
+                document.getElementById("certNumber").value = c.number || "";
+                document.getElementById("validFrom").value = formatDate(c.validFrom);
+                document.getElementById("expiryDate").value = formatDate(c.expiryDate);
+                document.getElementById("editIndex").value = editIdx;
+                document.getElementById("fileInput").value = "";
+                document.getElementById("fileName").textContent = c.fileName || "No file chosen";
+                document.getElementById('fileButtonText').textContent = c.fileName ? 'Change File' : 'Choose File';
+            } else {
+                document.getElementById("certName").value = "";
+                document.getElementById("certNumber").value = "";
+                document.getElementById("validFrom").value = "";
+                document.getElementById("expiryDate").value = "";
+                document.getElementById("fileInput").value = "";
+                document.getElementById("fileName").textContent = "No file chosen";
+                document.getElementById('fileButtonText').textContent = 'Choose File';
+                document.getElementById("editIndex").value = "";
+            }
+        }
+
+        function getFileBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(",")[1]);
+                reader.onerror = () => reject(reader.error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function checkExpirationsAndSendEmails() {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            
+            const expireLimitDate = new Date(today);
+            expireLimitDate.setDate(today.getDate() + 7); // 1 week for expiring soon
+
+            const expiringSoon = [];
+            const expired = [];
+
+            certificates.forEach(cert => {
+                const expiryDate = parseDate(cert.expiryDate);
+                if (!expiryDate) return;
+                
+                if (expiryDate < today) {
+                    expired.push(cert);
+                } else if (expiryDate >= today && expiryDate <= expireLimitDate) {
+                    expiringSoon.push(cert);
+                }
+            });
+
+            if (expiringSoon.length > 0 || expired.length > 0) {
+                sendExpirationEmails(expiringSoon, expired);
+            }
+        }
+
+        function sendExpirationEmails(expiringSoon, expired) {
+            // Format expiring soon certificates as numbered list
+            const expiringSoonList = expiringSoon.map((cert, index) => 
+                `${index+1}) ${cert.name} (${cert.number || 'N/A'}) - Expires on ${formatDate(cert.expiryDate)}`
+            ).join('<br>');
+            
+            // Format expired certificates as numbered list
+            const expiredList = expired.map((cert, index) => 
+                `${index+1}) ${cert.name} (${cert.number || 'N/A'}) - Expired on ${formatDate(cert.expiryDate)}`
+            ).join('<br>');
+
+            const emailParams = {
+                to_email: 'techcorruaesite@gmail.com,jayaramyadav108@gmail.com,jayaram@techcorr.com',
+                expiring_soon: expiringSoon.length > 0 ? 
+                    `Certificates expiring soon:<br>${expiringSoonList}` : 
+                    "No certificates expiring soon",
+                expired: expired.length > 0 ? 
+                    `Expired certificates:<br>${expiredList}` : 
+                    "No expired certificates",
+                subject: 'Certificate Expiration Alert'
+            };
+
+            emailjs.send('service_eeg5g7k', 'template_zmx80xb', emailParams)
+                .then(function(response) {
+                    console.log('Email sent successfully!', response);
+                }, function(error) {
+                    console.error('Failed to send email:', error);
+                });
+        }
+
+        function setupDailyCheck() {
+            const lastCheck = localStorage.getItem('lastExpirationCheck');
+            const today = new Date().toDateString();
+            
+            if (lastCheck !== today) {
+                checkExpirationsAndSendEmails();
+                localStorage.setItem('lastExpirationCheck', today);
+            }
+        }
+
+        async function saveCertificate() {
+            const name = document.getElementById("certName").value.trim();
+            if(!name) { 
+                alert("Certificate name required"); 
+                return; 
+            }
+
+            const number = document.getElementById("certNumber").value.trim();
+            const validFromInput = document.getElementById("validFrom").value.trim();
+            const expiryDateInput = document.getElementById("expiryDate").value.trim();
+
+            if(!validFromInput || !expiryDateInput) {
+                alert("Please enter both Valid From and Expiry Date");
+                return;
+            }
+
+            // Parse dates from DD-MM-YYYY format
+            const validFrom = parseDate(validFromInput);
+            const expiryDate = parseDate(expiryDateInput);
+            
+            if (!validFrom || !expiryDate) {
+                alert("Please enter dates in DD-MM-YYYY format");
+                return;
+            }
+            
+            if(validFrom > expiryDate) {
+                alert("Validity From date should be before Expiry Date");
+                return;
+            }
+
+            const editIdx = document.getElementById("editIndex").value;
+            const fileInput = document.getElementById("fileInput");
+            
+            try {
+                if(fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const fileData = await getFileBase64(file);
+                    
+                    if(editIdx === "") {
+                        // Add new certificate
+                        certificates.push({
+                            name, 
+                            number, 
+                            validFrom: validFromInput, 
+                            expiryDate: expiryDateInput,
+                            fileName: file.name,
+                            fileData,
+                            fileType: file.type
+                        });
+                    } else {
+                        // Update existing certificate
+                        certificates[editIdx] = {
+                            name, 
+                            number, 
+                            validFrom: validFromInput, 
+                            expiryDate: expiryDateInput,
+                            fileName: file.name,
+                            fileData,
+                            fileType: file.type
+                        };
+                    }
+                } else {
+                    if(editIdx === "") {
+                        // Add new certificate without file
+                        certificates.push({
+                            name, 
+                            number, 
+                            validFrom: validFromInput, 
+                            expiryDate: expiryDateInput,
+                            fileName: "",
+                            fileData: null,
+                            fileType: ""
+                        });
+                    } else {
+                        // Update existing certificate without changing file
+                        certificates[editIdx] = {
+                            ...certificates[editIdx],
+                            name, 
+                            number, 
+                            validFrom: validFromInput, 
+                            expiryDate: expiryDateInput
+                        };
+                    }
+                }
+
+                saveData();
+                document.getElementById("formSection").style.display = "none";
+                renderTable();
+                checkExpirationsAndSendEmails();
+            } catch (error) {
+                console.error("Error saving certificate:", error);
+                alert("Error saving certificate: " + error.message);
+            }
+        }
+
+        function applyFilter() {
+            currentFilter = document.getElementById("filterSelect").value;
+            renderTable();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById("certBody");
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
+            tbody.innerHTML = "";
+
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            
+            const expireLimitDate = new Date(today);
+            expireLimitDate.setDate(today.getDate() + 7); // 1 week for expiring soon
+
+            filteredCertificates = certificates.filter(c =>
+                c.name.toLowerCase().includes(searchTerm) ||
+                (c.number && c.number.toLowerCase().includes(searchTerm))
+            );
+
+            switch(currentFilter) {
+                case "a-z":
+                    filteredCertificates.sort((a,b) => a.name.localeCompare(b.name));
+                    break;
+                case "valid-expired":
+                    filteredCertificates.sort((a,b) => {
+                        const aExp = parseDate(a.expiryDate) < today ? 2 : parseDate(a.expiryDate) <= expireLimitDate ? 1 : 0;
+                        const bExp = parseDate(b.expiryDate) < today ? 2 : parseDate(b.expiryDate) <= expireLimitDate ? 1 : 0;
+                        return aExp - bExp || parseDate(a.expiryDate) - parseDate(b.expiryDate);
+                    });
+                    break;
+                case "expired-valid":
+                    filteredCertificates.sort((a,b) => {
+                        const aExp = parseDate(a.expiryDate) < today ? 2 : parseDate(a.expiryDate) <= expireLimitDate ? 1 : 0;
+                        const bExp = parseDate(b.expiryDate) < today ? 2 : parseDate(b.expiryDate) <= expireLimitDate ? 1 : 0;
+                        return bExp - aExp || parseDate(a.expiryDate) - parseDate(b.expiryDate);
+                    });
+                    break;
+                default:
+                    filteredCertificates.sort((a,b) => parseDate(a.expiryDate) - parseDate(b.expiryDate));
+            }
+
+            if (filteredCertificates.length === 0) {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td colspan="8" style="text-align: center;">No certificates found</td>`;
+                tbody.appendChild(tr);
+                return;
+            }
+
+            filteredCertificates.forEach((cert, i) => {
+                const tr = document.createElement("tr");
+                const expiryDate = parseDate(cert.expiryDate);
+                let statusClass = "";
+                let statusText = "";
+                let rowClass = "";
+                
+                if(!expiryDate) {
+                    statusClass = "status-expired";
+                    statusText = "INVALID DATE";
+                    rowClass = "expired-row";
+                } else if(expiryDate < today) {
+                    statusClass = "status-expired";
+                    statusText = "EXPIRED";
+                    rowClass = "expired-row";
+                } else if(expiryDate >= today && expiryDate <= expireLimitDate) {
+                    statusClass = "status-expiring";
+                    statusText = "EXPIRING SOON";
+                    rowClass = "expiring-row";
+                } else {
+                    statusClass = "status-valid";
+                    statusText = "VALID";
+                    rowClass = "valid-row";
+                }
+
+                tr.className = rowClass;
+                
+                const originalIndex = certificates.findIndex(c => 
+                    c.name === cert.name && 
+                    c.number === cert.number && 
+                    c.validFrom === cert.validFrom && 
+                    c.expiryDate === cert.expiryDate
+                );
+
+                tr.innerHTML = `
+                    <td>${i+1}</td>
+                    <td>${cert.name}</td>
+                    <td>${cert.number || "-"}</td>
+                    <td>${formatDate(cert.validFrom)}</td>
+                    <td>${formatDate(cert.expiryDate)}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        ${cert.fileData ? `
+                            <a class="btn-view" onclick="downloadFile(${originalIndex})">View</a>
+                        ` : "-"}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a class="btn-edit" onclick="editCertificate(${originalIndex})">Edit</a>
+                            <a class="btn-delete" onclick="deleteCertificate(${originalIndex})">Delete</a>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function downloadFile(index) {
+            const cert = certificates[index];
+            if (!cert.fileData) {
+                alert("No file available to download");
+                return;
+            }
+            
+            try {
+                const byteCharacters = atob(cert.fileData);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], {type: cert.fileType || 'application/octet-stream'});
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = cert.fileName || 'certificate_download';
+                document.body.appendChild(a);
+                a.click();
+                
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+            } catch (e) {
+                alert("Error downloading file: " + e.message);
+            }
+        }
+
+        function editCertificate(index) {
+            showForm(index);
+        }
+
+        function deleteCertificate(index) {
+            if(confirm("Are you sure to delete this certificate?")) {
+                certificates.splice(index, 1);
+                saveData();
+                renderTable();
+            }
+        }
+
+        const sortStates = { 
+            name: {asc: true}, 
+            number: {asc: true}, 
+            validFrom: {asc: true}, 
+            expiryDate: {asc: true} 
+        };
+
+        function sortBy(key) {
+            const currentState = sortStates[key];
+            const asc = currentState.asc;
+            
+            filteredCertificates.sort((a,b) => {
+                if(key === "name" || key === "number") {
+                    return asc ? (a[key] || "").localeCompare(b[key] || "") 
+                               : (b[key] || "").localeCompare(a[key] || "");
+                } else {
+                    const dateA = parseDate(a[key]);
+                    const dateB = parseDate(b[key]);
+                    return asc ? dateA - dateB : dateB - dateA;
+                }
+            });
+            
+            document.querySelectorAll('.sort-arrow').forEach(arrow => {
+                arrow.textContent = '↕';
+            });
+            document.querySelector(`th[onclick="sortBy('${key}')"] .sort-arrow`).textContent = asc ? ' ↑' : ' ↓';
+            currentState.asc = !asc;
+            renderTable();
+        }
+    </script>
+</body>
+</html>
